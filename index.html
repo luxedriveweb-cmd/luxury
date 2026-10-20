@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LUXEDRIVE — Ultra-Luxury VIP Car Rental</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              black: '#080B10',
+              card: '#101520',
+              accent: '#EAB308',
+              accentHover: '#CA8A04',
+              glow: '#38BDF8',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom CSS for Animations & Styling -->
+  <style>
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.2); }
+      50% { box-shadow: 0 0 30px rgba(245, 158, 11, 0.5); }
+    }
+
+    body {
+      background-color: #080B10;
+      color: #F3F4F6;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    
+    /* Glassmorphism Styles */
+    .glass-card {
+      background: rgba(16, 21, 32, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .glass-nav {
+      background: rgba(8, 11, 16, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    /* Hover Animation Card */
+    .glass-card-hover:hover {
+      border-color: rgba(245, 158, 11, 0.6);
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 20px 35px -10px rgba(245, 158, 11, 0.2);
+    }
+
+    .animate-fade-up {
+      animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .drawer-transition {
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Ambient Glow Effects */
+    .glow-gold {
+      box-shadow: 0 0 35px -5px rgba(234, 179, 8, 0.25);
+    }
+    
+    .glow-cyan {
+      box-shadow: 0 0 35px -5px rgba(56, 189, 248, 0.2);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #080B10;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1F2937;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #374151;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-amber-500 selection:text-black min-h-screen flex flex-col justify-between">
+
+  <!-- ================= NAVBAR ================= -->
+  <nav class="fixed top-0 left-0 right-0 z-50 glass-nav transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-2 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center text-black font-extrabold text-xl shadow-lg group-hover:scale-105 transition-transform">
+          L
+        </div>
+        <div>
+          <span class="text-xl font-black tracking-wider text-white">LUXE<span class="text-amber-400">DRIVE</span></span>
+          <span class="block text-[10px] tracking-widest text-gray-400 uppercase font-semibold">VIP Auto Rental</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation (User Links) -->
+      <div id="userNavLinks" class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
+        <a href="#beranda" class="hover:text-amber-400 transition-colors">Home</a>
+        <a href="#katalog" class="hover:text-amber-400 transition-colors">Car Collection</a>
+        <a href="#kalkulator" class="hover:text-amber-400 transition-colors">Rental Calculator</a>
+        <a href="#keunggulan" class="hover:text-amber-400 transition-colors">Why Choose Us</a>
+        <a href="#faq" class="hover:text-amber-400 transition-colors">FAQ</a>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-4">
+        <!-- Cart Toggle Button -->
+        <button id="cartToggleBtn" type="button" class="relative p-2.5 rounded-xl bg-gray-900/85 border border-gray-800 text-gray-300 hover:text-white hover:border-amber-500/50 transition-all active:scale-90">
+          <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+          <span id="cartBadge" class="absolute -top-1.5 -right-1.5 bg-amber-500 text-black text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center hidden animate-bounce">0</span>
+        </button>
+
+        <!-- User / Auth Section Container -->
+        <div id="userNavSection" class="flex items-center gap-3"></div>
+
+        <!-- Mobile Menu Toggle -->
+        <button id="mobileMenuBtn" class="md:hidden p-2 rounded-xl text-gray-400 hover:text-white focus:outline-none">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobileMenu" class="hidden md:hidden border-t border-gray-800 bg-brand-black/95 px-6 py-4 space-y-3">
+      <a href="#beranda" class="block text-gray-300 hover:text-amber-400 font-medium py-1">Home</a>
+      <a href="#katalog" class="block text-gray-300 hover:text-amber-400 font-medium py-1">Car Collection</a>
+      <a href="#kalkulator" class="block text-gray-300 hover:text-amber-400 font-medium py-1">Rental Calculator</a>
+      <a href="#keunggulan" class="block text-gray-300 hover:text-amber-400 font-medium py-1">Why Choose Us</a>
+      <a href="#faq" class="block text-gray-300 hover:text-amber-400 font-medium py-1">FAQ</a>
+    </div>
+  </nav>
+
+
+  <!-- ========================================== -->
+  <!-- 1. USER DASHBOARD VIEW                     -->
+  <!-- ========================================== -->
+  <div id="userDashboardView" class="animate-fade-up flex-grow">
+    
+    <!-- HERO SECTION -->
+    <section id="beranda" class="relative pt-32 pb-20 md:pt-44 md:pb-32 overflow-hidden">
+      <!-- Ambient Background Lighting -->
+      <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-amber-500/10 rounded-full blur-[140px] pointer-events-none"></div>
+      <div class="absolute bottom-10 right-10 w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[160px] pointer-events-none"></div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+        
+        <div class="max-w-3xl mx-auto space-y-6">
+          <!-- Badge -->
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card border-amber-500/30 text-amber-400 text-xs font-semibold uppercase tracking-widest hover:scale-105 transition-transform">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            <span>Top-Tier Premium Rental Experience</span>
+          </div>
+
+          <!-- Headline -->
+          <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-tight">
+            Rent Your Dream Car with <span class="bg-gradient-to-r from-amber-400 via-amber-200 to-yellow-500 bg-clip-text text-transparent">Style & Luxury</span>
+          </h1>
+
+          <!-- Description -->
+          <p class="text-gray-400 text-base sm:text-lg max-w-2xl mx-auto">
+            Experience high-end supercars, luxury SUVs, and VIP vans with our rapid concierge booking, professional chauffeurs, and comprehensive all-risk insurance.
+          </p>
+        </div>
+
+        <!-- Filter / Search Bar Card -->
+        <div class="mt-12 max-w-5xl mx-auto glass-card rounded-2xl p-4 sm:p-6 shadow-2xl relative glow-gold text-left">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            <!-- Pickup Location -->
+            <div class="bg-brand-card/90 p-3.5 rounded-xl border border-gray-800 hover:border-amber-500/40 transition-colors">
+              <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-amber-400"></i> Location
+              </label>
+              <select id="filterLocation" class="w-full bg-brand-card text-gray-200 font-medium focus:outline-none cursor-pointer focus:text-amber-400">
+                <option value="all" class="bg-[#101520] text-gray-200">All Locations</option>
+                <option value="Jakarta" class="bg-[#101520] text-gray-200">Jakarta & Greater Area</option>
+                <option value="Bali" class="bg-[#101520] text-gray-200">Bali (Denpasar/Seminyak)</option>
+                <option value="Surabaya" class="bg-[#101520] text-gray-200">Surabaya & Surroundings</option>
+                <option value="Bandung" class="bg-[#101520] text-gray-200">Bandung</option>
+              </select>
+            </div>
+
+            <!-- Car Category -->
+            <div class="bg-brand-card/90 p-3.5 rounded-xl border border-gray-800 hover:border-amber-500/40 transition-colors">
+              <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                <i data-lucide="car" class="w-3.5 h-3.5 text-amber-400"></i> Category
+              </label>
+              <select id="filterCategory" class="w-full bg-brand-card text-gray-200 font-medium focus:outline-none cursor-pointer focus:text-amber-400">
+                <option value="all" class="bg-[#101520] text-gray-200">All Categories</option>
+                <option value="supercar" class="bg-[#101520] text-gray-200">Supercar / Sport</option>
+                <option value="luxury-suv" class="bg-[#101520] text-gray-200">Luxury SUV</option>
+                <option value="vip-van" class="bg-[#101520] text-gray-200">VIP MPV & Van</option>
+              </select>
+            </div>
+
+            <!-- Rental Date -->
+            <div class="bg-brand-card/90 p-3.5 rounded-xl border border-gray-800 hover:border-amber-500/40 transition-colors">
+              <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                <i data-lucide="calendar" class="w-3.5 h-3.5 text-amber-400"></i> Rental Date
+              </label>
+              <input type="date" id="filterDate" class="w-full bg-brand-card text-gray-200 font-medium focus:outline-none cursor-pointer [color-scheme:dark]" />
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex items-end">
+              <button id="applyFiltersBtn" type="button" class="w-full h-[52px] bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl hover:shadow-lg hover:shadow-amber-500/20 hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-2">
+                <i data-lucide="search" class="w-5 h-5"></i>
+                <span>Search Fleet</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      <section>
+
+        <!-- Trust Badges -->
+        <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto text-center">
+          <div class="p-4 rounded-xl glass-card">
+            <div class="text-2xl sm:text-3xl font-extrabold text-amber-400">50+</div>
+            <div class="text-xs text-gray-400 mt-1">Supercars & VIP Fleet</div>
+          </div>
+          <div class="p-4 rounded-xl glass-card">
+            <div class="text-2xl sm:text-3xl font-extrabold text-white">100%</div>
+            <div class="text-xs text-gray-400 mt-1">All-Risk Insurance</div>
+          </div>
+          <div class="p-4 rounded-xl glass-card">
+            <div class="text-2xl sm:text-3xl font-extrabold text-amber-400">24/7</div>
+            <div class="text-xs text-gray-400 mt-1">VIP Concierge Service</div>
+          </div>
+          <div class="p-4 rounded-xl glass-card">
+            <div class="text-2xl sm:text-3xl font-extrabold text-white">4.9/5</div>
+            <div class="text-xs text-gray-400 mt-1">Client Satisfaction Rating</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- CAR COLLECTION CATALOG SECTION -->
+    <section id="katalog" class="py-20 relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+        <div>
+          <span class="text-amber-400 text-xs font-bold uppercase tracking-widest">Exclusive Collection</span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-1">Choose Your Dream Vehicle</h2>
+        </div>
+      </div>
+
+      <!-- Car Grid Container -->
+      <div id="fleetGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+    </section>
+
+    <!-- RENTAL CALCULATOR SIMULATOR SECTION -->
+    <section id="kalkulator" class="py-20 bg-gray-900/40 relative border-y border-gray-800/80">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          <!-- Left Column Info -->
+          <div class="lg:col-span-5 space-y-6">
+            <span class="text-amber-400 text-xs font-bold uppercase tracking-widest">Transparent Pricing Simulation</span>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-white leading-tight">
+              Interactive Rental Calculator & Duration Discounts
+            </h2>
+            <p class="text-gray-400 text-sm leading-relaxed">
+              Calculate estimated rental costs automatically. Enjoy progressive discounts up to <span class="text-amber-400 font-bold">25%</span> for rental periods exceeding 14 days.
+            </p>
+
+            <!-- Discount Info Cards -->
+            <div class="space-y-3 pt-2">
+              <div class="p-3.5 rounded-xl bg-gray-900/80 border border-gray-800 flex items-center justify-between">
+                <span class="text-sm font-medium text-gray-300">Rental 3 - 6 Days</span>
+                <span class="text-xs font-bold px-2.5 py-1 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20">5% Discount</span>
+              </div>
+              <div class="p-3.5 rounded-xl bg-gray-900/80 border border-gray-800 flex items-center justify-between">
+                <span class="text-sm font-medium text-gray-300">Rental 7 - 13 Days</span>
+                <span class="text-xs font-bold px-2.5 py-1 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20">15% Discount</span>
+              </div>
+              <div class="p-3.5 rounded-xl bg-gray-900/80 border border-gray-800 flex items-center justify-between">
+                <span class="text-sm font-medium text-gray-300">Rental 14+ Days</span>
+                <span class="text-xs font-bold px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">VIP 25% Discount</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column Calculator Box -->
+          <div class="lg:col-span-7">
+            <div class="glass-card p-6 sm:p-8 rounded-3xl glow-cyan relative">
+              <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                <i data-lucide="calculator" class="w-5 h-5 text-amber-400"></i>
+                Rental Cost Simulation
+              </h3>
+
+              <div class="space-y-6">
+                <!-- Select Car -->
+                <div>
+                  <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Select Vehicle</label>
+                  <select id="calcCarSelect" class="w-full bg-gray-900 border border-gray-800 text-white rounded-xl p-3.5 text-sm focus:outline-none focus:border-amber-500 cursor-pointer">
+                  </select>
+                </div>
+
+                <!-- Duration Input / Slider -->
+                <div>
+                  <div class="flex justify-between items-center mb-2">
+                    <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Rental Duration (Days)</label>
+                    <span class="text-sm font-extrabold text-amber-400" id="calcDaysDisplay">1 Day</span>
+                  </div>
+                  <input type="number" id="calcDays" min="1" max="30" value="1" class="w-full bg-gray-900 border border-gray-800 text-white rounded-xl p-3 text-sm focus:outline-none focus:border-amber-500" />
+                </div>
+
+                <!-- Addons Options -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                  <label class="flex items-center gap-3 p-3.5 rounded-xl bg-gray-900/60 border border-gray-800 cursor-pointer hover:border-gray-700">
+                    <input type="checkbox" id="calcDriver" class="w-4 h-4 accent-amber-500 rounded cursor-pointer" />
+                    <div>
+                      <span class="block text-xs font-bold text-white">VIP Chauffeur / Driver</span>
+                      <span class="text-[11px] text-gray-400">+Rp 500,000 / day</span>
+                    </div>
+                  </label>
+
+                  <label class="flex items-center gap-3 p-3.5 rounded-xl bg-gray-900/60 border border-gray-800 cursor-pointer hover:border-gray-700">
+                    <input type="checkbox" id="calcInsurance" class="w-4 h-4 accent-amber-500 rounded cursor-pointer" checked />
+                    <div>
+                      <span class="block text-xs font-bold text-white">VIP All-Risk Insurance</span>
+                      <span class="text-[11px] text-gray-400">+Rp 250,000 / day</span>
+                    </div>
+                  </label>
+                </div>
+
+                <!-- Calculation Breakdown Output -->
+                <div class="border-t border-gray-800/80 pt-6 space-y-2 text-sm">
+                  <div class="flex justify-between text-lg sm:text-xl font-extrabold text-white pt-3 border-t border-gray-800">
+                    <span>Total Estimated Cost:</span>
+                    <span id="calcResult" class="text-amber-400">Rp 0</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- WHY CHOOSE US / KEUNGGULAN -->
+    <section id="keunggulan" class="py-20 relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="text-amber-400 text-xs font-bold uppercase tracking-widest">Exclusive Standards</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-1">Why Choose LUXEDRIVE?</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <div class="glass-card glass-card-hover p-8 rounded-2xl transition-all duration-300 text-center">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mb-6 text-2xl">
+            🛡️
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">All-Risk Insurance</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">
+            Every journey is fully protected so you can drive with complete peace of mind.
+          </p>
+        </div>
+
+        <div class="glass-card glass-card-hover p-8 rounded-2xl transition-all duration-300 text-center">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mb-6 text-2xl">
+            🏎️
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Pristine & Maintained Condition</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">
+            Vehicles undergo regular inspections and thorough sanitization before every handover.
+          </p>
+        </div>
+
+        <div class="glass-card glass-card-hover p-8 rounded-2xl transition-all duration-300 text-center">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mb-6 text-2xl">
+            ⭐
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">24/7 Concierge Service</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">
+            Our team is ready to assist with vehicle delivery to your preferred location anytime.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section id="faq" class="py-20 bg-gray-900/30 border-t border-gray-800">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center mb-12">
+          <span class="text-amber-400 text-xs font-bold uppercase tracking-widest">Common Questions</span>
+          <h2 class="text-3xl font-extrabold text-white mt-1">Frequently Asked Questions (FAQ)</h2>
+        </div>
+
+        <div class="space-y-4">
+          <div class="glass-card glass-card-hover p-6 rounded-2xl border border-gray-800">
+            <h4 class="font-bold text-amber-400 text-base mb-2">What are the requirements for self-drive rentals?</h4>
+            <p class="text-gray-400 text-sm leading-relaxed">Key requirements include a valid National ID (KTP/Passport), an active Driver's License (SIM A), proof of accommodation, and a refundable security deposit.</p>
+          </div>
+          <div class="glass-card glass-card-hover p-6 rounded-2xl border border-gray-800">
+            <h4 class="font-bold text-amber-400 text-base mb-2">Can the vehicle be delivered directly to an Airport or Hotel?</h4>
+            <p class="text-gray-400 text-sm leading-relaxed">Yes, we provide direct delivery and pick-up services at major airports, five-star hotels, or private residences in supported cities.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+
+  <!-- ========================================== -->
+  <!-- 2. ADMIN DASHBOARD VIEW                    -->
+  <!-- ========================================== -->
+  <div id="adminDashboardView" class="max-w-7xl mx-auto p-6 flex-grow w-full hidden animate-fade-up pt-28">
+    <div class="flex justify-between items-center mb-6">
+      <div>
+        <span class="text-amber-400 text-xs font-bold uppercase tracking-widest">Control Panel</span>
+        <h2 class="text-3xl font-black text-white">Admin Management Dashboard</h2>
+      </div>
+      <button id="addNewCarBtn" type="button" class="bg-amber-500 text-black px-4 py-2.5 rounded-xl text-xs font-bold hover:bg-amber-400 active:scale-95 transition-all shadow-lg hover:shadow-amber-500/20">+ Add New Car</button>
+    </div>
+
+    <!-- ADMIN TABS -->
+    <div class="flex border-b border-gray-800 mb-6 gap-6 text-sm font-bold">
+      <button id="tabManageCars" type="button" class="pb-3 text-amber-400 border-b-2 border-amber-400 transition-all">Manage Fleet & Stock</button>
+      <button id="tabManageOrders" type="button" class="pb-3 text-gray-400 hover:text-white transition-all">Manage Customer Orders</button>
+    </div>
+
+    <!-- MANAGE CARS TABLE -->
+    <div id="adminCarsSection" class="glass-card p-6 rounded-2xl border border-gray-800/80 overflow-x-auto">
+      <table class="w-full text-left text-xs text-gray-300">
+        <thead class="bg-gray-900 text-gray-400 uppercase border-b border-gray-800">
+          <tr>
+            <th class="p-3">Image</th>
+            <th class="p-3">Car & Brand</th>
+            <th class="p-3">Category & Location</th>
+            <th class="p-3">Price / Day</th>
+            <th class="p-3">Availability Status</th>
+            <th class="p-3">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="adminCarsTableBody" class="divide-y divide-gray-800/80"></tbody>
+      </table>
+    </div>
+
+    <!-- MANAGE ORDERS TABLE -->
+    <div id="adminOrdersSection" class="glass-card p-6 rounded-2xl border border-gray-800/80 overflow-x-auto hidden">
+      <table class="w-full text-left text-xs text-gray-300">
+        <thead class="bg-gray-900 text-gray-400 uppercase border-b border-gray-800">
+          <tr>
+            <th class="p-3">ID / User</th>
+            <th class="p-3">Rental Details</th>
+            <th class="p-3">Total Cost</th>
+            <th class="p-3">Order Status</th>
+            <th class="p-3">Update Status</th>
+          </tr>
+        </thead>
+        <tbody id="adminOrdersTableBody" class="divide-y divide-gray-800/80"></tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="bg-black border-t border-gray-800 pt-16 pb-12 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+        <div class="space-y-4 md:col-span-1">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center text-black font-extrabold text-lg">L</div>
+            <span class="text-lg font-black tracking-wider text-white">LUXE<span class="text-amber-400">DRIVE</span></span>
+          </div>
+          <p class="text-xs text-gray-400 leading-relaxed">
+            Indonesia's premier luxury & supercar rental provider adhering to international VIP service standards.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4">Navigation</h4>
+          <ul class="space-y-2 text-xs text-gray-400">
+            <li><a href="#beranda" class="hover:text-amber-400 transition-colors">Home</a></li>
+            <li><a href="#katalog" class="hover:text-amber-400 transition-colors">Car Collection</a></li>
+            <li><a href="#kalkulator" class="hover:text-amber-400 transition-colors">Rental Calculator</a></li>
+            <li><a href="#keunggulan" class="hover:text-amber-400 transition-colors">Why Choose Us</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4">Fleet Categories</h4>
+          <ul class="space-y-2 text-xs text-gray-400">
+            <li><a href="#katalog" class="hover:text-amber-400 transition-colors">Supercars & Sportscars</a></li>
+            <li><a href="#katalog" class="hover:text-amber-400 transition-colors">Luxury SUVs</a></li>
+            <li><a href="#katalog" class="hover:text-amber-400 transition-colors">VIP Alphard & Vans</a></li>
+            <li><a href="#katalog" class="hover:text-amber-400 transition-colors">Ultra Luxury Sedans</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4">Customer Service</h4>
+          <div class="space-y-3 text-xs text-gray-400">
+            <div class="flex items-center gap-2">
+              <i data-lucide="phone" class="w-4 h-4 text-amber-400"></i>
+              <span>+62 811-3321-922 (VIP Direct)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <i data-lucide="mail" class="w-4 h-4 text-amber-400"></i>
+              <span>concierge@luxedrive.id</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <i data-lucide="map-pin" class="w-4 h-4 text-amber-400"></i>
+              <span>SCBD, South Jakarta - Indonesia</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-900 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500 gap-4">
+        <div>&copy; 2026 LUXEDRIVE VIP Auto Rental. All rights reserved. Proyek Informatika SMA Negeri 2 Taruna Pamong Praja Jawa Timur.</div>
+        <div class="flex gap-6">
+          <a href="#" class="hover:text-gray-400">Privacy Policy</a>
+          <a href="#" class="hover:text-gray-400">Terms of Service</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+
+  <!-- ================= MODALS & DRAWERS ================= -->
+
+  <!-- AUTH MODAL (LOGIN / REGISTER) -->
+  <div id="authModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden transition-opacity">
+    <div class="glass-card max-w-md w-full rounded-3xl p-6 sm:p-8 relative border border-gray-700 shadow-2xl animate-fade-up">
+      <button id="closeAuthBtn" type="button" class="absolute top-5 right-5 text-gray-400 hover:text-white p-2">✕</button>
+      
+      <div id="loginSection">
+        <span class="text-amber-400 text-xs font-bold uppercase tracking-widest">VIP Account Access</span>
+        <h3 class="text-2xl font-extrabold text-white mt-1 mb-6">Sign In to LUXEDRIVE</h3>
+        <form id="loginForm" class="space-y-4 text-xs">
+          <div>
+            <label class="block font-semibold text-gray-400 uppercase mb-1">Email</label>
+            <input type="email" id="loginEmail" required placeholder="admin@luxedrive.id or user@gmail.com" class="w-full bg-gray-900 border border-gray-800 text-white rounded-xl p-3 focus:outline-none focus:border-amber-500" />
+          </div>
+          <div>
+            <label class="block font-semibold text-gray-400 uppercase mb-1">Password</label>
+            <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full bg-gray-900 border border-gray-800 text-white rounded-xl p-3 focus:outline-none focus:border-amber-500" />
+          </div>
+          <button type="submit" class="w-full bg-amber-500 text-black font-bold py-3.5 rounded-xl hover:bg-amber-400 active:scale-95 transition-all text-sm">Sign In</button>
+        </form>
+        <div class="mt-4 text-center text-xs text-gray-400">
+          Don't have an account? <button id="switchToRegister" type="button" class="text-amber-400 font-bold hover:underline">Register Now</button>
+        </div>
+      </div>
+
+      <div id="registerSection" class="hidden">
+        <span class="text-amber-400 text-xs font-bold uppercase tracking-widest">Member Registration</span>
+        <h3 class="text-2xl font-extrabold text-white mt-1 mb-6">Create New Account</h3>
+        <form id="registerForm" class="space-y-4 text-xs">
+          <div>
+            <label class="block font-semibold text-gray-400 uppercase mb-1">Full Name</label>
+            <input type="text" id="regName" required placeholder="Your Name" class="w-full bg-gray-900 border border-gray-800 text-white rounded-xl p-3" />
+          </div>
+          <div>
+            <label class="block font-semibold text-gray-400 uppercase mb-1">Email</label>
+            <input type="email" id="regEmail" required placeholder="email@domain.com" class="w-full bg-gray-900 border border-gray-800 text-white rounded-xl p-3" />
+          </div>
+          <div>
+            <label class="block font-semibold text-gray-400 uppercase mb-1">WhatsApp Number</label>
+            <input type="tel" id="regPhone" required placeholder="081234567890" class="w-full bg-gray-900 border border-gray-800 text-white rounded-xl p-3" />
+          </div>
+          <div>
+            <label class="block font-semibold text-gray-400 uppercase mb-1">Password</label>
+            <input type="password" id="regPassword" required placeholder="••••••••" class="w-full bg-gray-900 border border-gray-800 text-white rounded-xl p-3" />
+          </div>
+          <button type="submit" class="w-full bg-amber-500 text-black font-bold py-3.5 rounded-xl hover:bg-amber-400 active:scale-95 transition-all text-sm">Register & Sign In</button>
+        </form>
+        <div class="mt-4 text-center text-xs text-gray-400">
+          Already have an account? <button id="switchToLogin" type="button" class="text-amber-400 font-bold hover:underline">Sign In</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CART DRAWER -->
+  <div id="cartDrawer" class="fixed inset-y-0 right-0 z-50 w-full sm:w-[450px] bg-gray-950/95 backdrop-blur-xl border-l border-gray-800 p-6 transform translate-x-full drawer-transition overflow-y-auto flex flex-col justify-between shadow-2xl">
+    <div>
+      <div class="flex items-center justify-between pb-6 border-b border-gray-800">
+        <h3 class="text-lg font-extrabold text-white flex items-center gap-2">
+          <i data-lucide="shopping-bag" class="w-5 h-5 text-amber-400"></i>
+          <span>My Rental Cart</span>
+        </h3>
+        <button id="closeCartBtn" type="button" class="text-gray-400 hover:text-white p-1">✕</button>
+      </div>
+      <div id="cartItemsContainer" class="py-4 space-y-4"></div>
+    </div>
+    <div class="border-t border-gray-800 pt-4 mt-6 space-y-4">
+      <div class="flex justify-between text-base font-extrabold text-white">
+        <span>Estimated Total:</span>
+        <span id="cartGrandTotal" class="text-amber-400">Rp 0</span>
+      </div>
+      <button id="checkoutBtn" type="button" class="w-full bg-gradient-to-r from-amber-500 to-yellow-400 text-black font-bold py-3.5 rounded-xl hover:shadow-lg hover:shadow-amber-500/20 active:scale-98 transition-all flex items-center justify-center gap-2 text-xs">
+        <i data-lucide="message-square" class="w-4 h-4"></i>
+        <span>Book via WhatsApp (08113321922)</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ADMIN EDIT/ADD CAR MODAL -->
+  <div id="carFormModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden">
+    <div class="glass-card max-w-lg w-full rounded-3xl p-6 relative border border-gray-700 animate-fade-up max-h-[90vh] overflow-y-auto">
+      <button id="closeCarFormBtn" type="button" class="absolute top-5 right-5 text-gray-400 hover:text-white p-2">✕</button>
+      <h3 id="carFormTitle" class="text-xl font-bold text-white mb-4">Edit Vehicle</h3>
+      <form id="carEditorForm" class="space-y-3 text-xs">
+        <input type="hidden" id="editCarId" />
+        <div>
+          <label class="block text-gray-400 mb-1">Car Name</label>
+          <input type="text" id="editCarName" required class="w-full bg-gray-900 border border-gray-800 text-white rounded-xl p-2.5" />
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-gray-400 mb-1">Brand</label>
+            <input type="text" id="editCarBrand" required class="w-full bg-gray-900 border border-gray-800 text-white rounded-xl p-2.5" />
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">Category</label>
+            <select id="editCarCategory" class="w-full bg-gray-900 border border-gray-800 text-white rounded-xl p-2.5">
+              <option value="supercar">Supercar</option>
+              <option value="luxury-suv">Luxury SUV</option>
+              <option value="vip-van">VIP MPV & Van</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-gray-400 mb-1">Price / Day (IDR)</label>
+            <input type="number" id="editCarPrice" required class="w-full bg-gray-900 border border-gray-800 text-white rounded-xl p-2.5" />
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">Location</label>
+            <select id="editCarLocation" class="w-full bg-gray-900 border border-gray-800 text-white rounded-xl p-2.5">
+              <option value="Jakarta">Jakarta</option>
+              <option value="Bali">Bali</option>
+              <option value="Surabaya">Surabaya</option>
+              <option value="Bandung">Bandung</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-gray-400 mb-1">Availability Status</label>
+            <select id="editCarStatus" class="w-full bg-gray-900 border border-gray-800 text-white rounded-xl p-2.5">
+              <option value="tersedia">Available</option>
+              <option value="disewa">Rented</option>
+              <option value="tidak_tersedia">Unavailable</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">Badge Tag</label>
+            <input type="text" id="editCarBadge" placeholder="Top Popular / VIP Icon" class="w-full bg-gray-900 border border-gray-800 text-white rounded-xl p-2.5" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-gray-400 mb-1">Image URL</label>
+          <input type="url" id="editCarImage" required class="w-full bg-gray-900 border border-gray-800 text-white rounded-xl p-2.5" />
+        </div>
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="block text-gray-400 mb-1">Seats</label>
+            <input type="number" id="editCarSeats" required class="w-full bg-gray-900 border border-gray-800 text-white rounded-xl p-2.5" />
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">Transmission</label>
+            <input type="text" id="editCarTrans" required class="w-full bg-gray-900 border border-gray-800 text-white rounded-xl p-2.5" />
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-1">Year</label>
+            <input type="number" id="editCarYear" required class="w-full bg-gray-900 border border-gray-800 text-white rounded-xl p-2.5" />
+          </div>
+        </div>
+        <button type="submit" class="w-full bg-amber-500 text-black font-bold py-3 rounded-xl mt-4 hover:bg-amber-400 active:scale-95 transition-all">Save Vehicle Data</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- USER ORDERS MODAL -->
+  <div id="userOrdersModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden">
+    <div class="glass-card max-w-2xl w-full rounded-3xl p-6 relative border border-gray-700 max-h-[80vh] overflow-y-auto animate-fade-up">
+      <button id="closeUserOrdersBtn" type="button" class="absolute top-5 right-5 text-gray-400 hover:text-white p-2">✕</button>
+      <span class="text-amber-400 text-xs font-bold uppercase tracking-widest">Transaction History</span>
+      <h3 class="text-2xl font-extrabold text-white mt-1 mb-6">My Rental Orders</h3>
+      <div id="userOrdersList" class="space-y-4"></div>
+    </div>
+  </div>
+
+
+  <!-- ================= JAVASCRIPT ENGINE ================= -->
+  <script>
+
+     const initialCars = [
+      { id: 1, name: "Porsche 911 GT3 RS", brand: "Porsche", category: "supercar", pricePerDay: 18000000, location: "Jakarta", image: "https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=800&q=80", seats: 2, transmission: "Automatic", year: 2023, badge: "Most Popular", status: "tersedia" },
+      { id: 2, name: "Lamborghini Huracán EVO", brand: "Lamborghini", category: "supercar", pricePerDay: 25000000, location: "Bali", image: "https://images.unsplash.com/photo-1544829099-b9a0c07fad1a?auto=format&fit=crop&w=800&q=80", seats: 2, transmission: "Automatic", year: 2022, badge: "V10 Power", status: "tersedia" },
+      { id: 3, name: "Mercedes-AMG G63", brand: "Mercedes-Benz", category: "luxury-suv", pricePerDay: 12000000, location: "Jakarta", image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=800&q=80", seats: 5, transmission: "Automatic", year: 2023, badge: "VIP Icon", status: "tersedia" },
+      { id: 4, name: "Toyota Alphard Executive Lounge", brand: "Toyota", category: "vip-van", pricePerDay: 3500000, location: "Surabaya", image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=800&q=80", seats: 7, transmission: "Automatic", year: 2024, badge: "Chauffeur Ready", status: "tersedia" },
+      { id: 5, name: "Rolls-Royce Ghost", brand: "Rolls-Royce", category: "supercar", pricePerDay: 35000000, location: "Bali", image: "https://images.unsplash.com/photo-1631295868223-63265b40d9e4?auto=format&fit=crop&w=800&q=80", seats: 5, transmission: "Automatic", year: 2023, badge: "Ultra Luxury", status: "tersedia" },
+      { id: 6, name: "BMW M5 Competition", brand: "BMW", category: "supercar", pricePerDay: 15000000, location: "Bali", image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=800&q=80", seats: 5, transmission: "Automatic", year: 2023, badge: "Sport Luxury", status: "tersedia" }
+    ];
+
+    let dbCars = [];
+    let dbUsers = [];
+    let currentUser = null;
+    let cart = [];
+    let dbOrders = [];
+
+    try {
+      dbCars = JSON.parse(localStorage.getItem('luxedrive_cars')) || initialCars;
+      dbCars = dbCars.map(car => {
+        if (car.id === 3 && (car.image.includes('520031441872') || !car.image.startsWith('http'))) {
+          car.image = "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=800&q=80";
+        }
+        return car;
+      });
+
+      dbUsers = JSON.parse(localStorage.getItem('luxedrive_users')) || [
+        { id: 1, name: "Administrator", email: "admin@luxedrive.id", password: "admin", role: "admin", phone: "08113321922" },
+        { id: 2, name: "User Demo", email: "user@gmail.com", password: "user123", role: "user", phone: "08123456789" }
+      ];
+      currentUser = JSON.parse(localStorage.getItem('luxedrive_current_user')) || null;
+      cart = JSON.parse(localStorage.getItem('luxedrive_cart')) || [];
+      dbOrders = JSON.parse(localStorage.getItem('luxedrive_orders')) || [];
+    } catch (e) {
+      dbCars = initialCars;
+    }
+
+    function saveData() {
+      localStorage.setItem('luxedrive_cars', JSON.stringify(dbCars));
+      localStorage.setItem('luxedrive_users', JSON.stringify(dbUsers));
+      localStorage.setItem('luxedrive_current_user', JSON.stringify(currentUser));
+      localStorage.setItem('luxedrive_cart', JSON.stringify(cart));
+      localStorage.setItem('luxedrive_orders', JSON.stringify(dbOrders));
+    }
+
+    const formatRupiah = (num) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num);
+
+    function applyRoleBasedView() {
+      const userDashboardView = document.getElementById('userDashboardView');
+      const adminDashboardView = document.getElementById('adminDashboardView');
+      const userNavLinks = document.getElementById('userNavLinks');
+      const userNavSection = document.getElementById('userNavSection');
+
+      if (currentUser && currentUser.role === 'admin') {
+        userDashboardView.classList.add('hidden');
+        adminDashboardView.classList.remove('hidden');
+        userNavLinks.classList.add('hidden');
+
+        userNavSection.innerHTML = `
+          <span class="text-xs text-amber-400 font-bold bg-amber-500/10 border border-amber-500/30 px-3 py-1.5 rounded-xl">👑 Admin Mode</span>
+          <button id="logoutBtn" type="button" class="p-2 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 text-xs transition-all active:scale-95">Logout</button>
+        `;
+        renderAdminTables();
+      } else {
+        userDashboardView.classList.remove('hidden');
+        adminDashboardView.classList.add('hidden');
+        userNavLinks.classList.remove('hidden');
+
+        if (currentUser) {
+          userNavSection.innerHTML = `
+            <button id="openUserOrders" type="button" class="bg-gray-900 border border-gray-800 text-xs text-amber-400 font-bold px-3 py-2 rounded-xl hover:border-amber-500/50 transition-all active:scale-95">📋 My Orders</button>
+            <button id="logoutBtn" type="button" class="p-2 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 text-xs transition-all active:scale-95">Logout</button>
+          `;
+        } else {
+          userNavSection.innerHTML = `
+            <button id="openLoginBtn" type="button" class="bg-gray-900 border border-gray-800 text-white hover:text-amber-400 text-xs font-bold px-4 py-2.5 rounded-xl transition-all active:scale-95 hover:border-amber-500/40">Sign In / Register</button>
+          `;
+        }
+        renderFleet();
+        populateCalcSelect();
+      }
+
+      bindAuthEvents();
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+      }
+    }
+
+    function renderFleet() {
+      const fleetGrid = document.getElementById('fleetGrid');
+      if (!fleetGrid) return;
+
+      const locVal = document.getElementById('filterLocation')?.value || 'all';
+      const catVal = document.getElementById('filterCategory')?.value || 'all';
+
+      const filtered = dbCars.filter(car => {
+        const matchLoc = locVal === 'all' || car.location === locVal;
+        const matchCat = catVal === 'all' || car.category === catVal;
+        return matchLoc && matchCat;
+      });
+
+      fleetGrid.innerHTML = '';
+      if (filtered.length === 0) {
+        fleetGrid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500">No vehicles match your filter criteria.</div>`;
+        return;
+      }
+
+      filtered.forEach((car, index) => {
+        let statusBadge = `<span class="bg-amber-500/90 text-black text-[10px] font-extrabold uppercase px-3 py-1 rounded-full shadow-lg">${car.badge}</span>`;
+        if (car.status === 'disewa') statusBadge = `<span class="bg-red-500/90 text-white text-[10px] font-extrabold uppercase px-3 py-1 rounded-full shadow-lg">Rented</span>`;
+        if (car.status === 'tidak_tersedia') statusBadge = `<span class="bg-gray-600/90 text-white text-[10px] font-extrabold uppercase px-3 py-1 rounded-full shadow-lg">Unavailable</span>`;
+
+        const card = document.createElement('div');
+        card.className = 'glass-card glass-card-hover rounded-3xl overflow-hidden group border border-gray-800/80 transition-all flex flex-col justify-between animate-fade-up';
+        card.style.animationDelay = `${index * 80}ms`;
+
+        card.innerHTML = `
+          <div>
+            <div class="relative h-56 overflow-hidden bg-gray-900">
+              <img src="${car.image}" alt="${car.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+              <div class="absolute top-4 left-4 flex gap-2 z-10">${statusBadge}</div>
+              <span class="absolute bottom-4 right-4 bg-black/75 backdrop-blur-md px-2.5 py-1 rounded-lg text-[10px] text-gray-300 border border-white/10">📍 ${car.location}</span>
+            </div>
+            <div class="p-6 space-y-4">
+              <div>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400">${car.brand}</span>
+                <h3 class="text-xl font-extrabold text-white group-hover:text-amber-400 transition-colors">${car.name}</h3>
+              </div>
+              <div class="grid grid-cols-3 gap-2 py-3 border-y border-gray-800/80 text-xs text-gray-400">
+                <div class="flex items-center gap-1.5">👤 ${car.seats} Seats</div>
+                <div class="flex items-center gap-1.5">⚡ ${car.transmission}</div>
+                <div class="flex items-center gap-1.5">📅 ${car.year}</div>
+              </div>
+            </div>
+          </div>
+          <div class="p-6 pt-0 flex items-center justify-between">
+            <div>
+              <span class="text-xs text-gray-400 block">Starting from</span>
+              <span class="text-lg font-extrabold text-white">${formatRupiah(car.pricePerDay)}</span>
+              <span class="text-xs text-gray-400">/day</span>
+            </div>
+            ${car.status === 'tersedia' 
+              ? `<button onclick="addToCart(${car.id})" type="button" class="bg-amber-500 hover:bg-amber-400 text-black font-bold px-4 py-2.5 rounded-xl text-sm transition-all flex items-center gap-1.5 shadow-md hover:shadow-amber-500/30"><span>Rent</span><i data-lucide="chevron-right" class="w-4 h-4"></i></button>`
+              : `<button disabled type="button" class="bg-gray-800 text-gray-500 font-bold px-4 py-2.5 rounded-xl text-sm cursor-not-allowed">Rented</button>`
+            }
+          </div>
+        `;
+        fleetGrid.appendChild(card);
+      });
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+      }
+    }
+
+    function populateCalcSelect() {
+      const select = document.getElementById('calcCarSelect');
+      if (!select) return;
+      select.innerHTML = dbCars.map(c => `<option value="${c.id}">${c.name} - ${formatRupiah(c.pricePerDay)}/day</option>`).join('');
+      calculateEstimate();
+    }
+
+    function calculateEstimate() {
+      const carSelect = document.getElementById('calcCarSelect');
+      if (!carSelect || !carSelect.value) return;
+
+      const carId = parseInt(carSelect.value);
+      const days = parseInt(document.getElementById('calcDays').value) || 1;
+      const needDriver = document.getElementById('calcDriver').checked;
+      const needInsurance = document.getElementById('calcInsurance').checked;
+
+      const car = dbCars.find(c => c.id === carId);
+      if (!car) return;
+
+      document.getElementById('calcDaysDisplay').innerText = `${days} Day${days > 1 ? 's' : ''}`;
+
+      let extra = (needDriver ? 500000 : 0) + (needInsurance ? 250000 : 0);
+      let basePrice = (car.pricePerDay + extra) * days;
+
+      let discountRate = 0;
+      if (days >= 14) discountRate = 0.25;
+      else if (days >= 7) discountRate = 0.15;
+      else if (days >= 3) discountRate = 0.05;
+
+      let finalTotal = basePrice - (basePrice * discountRate);
+
+      const calcResult = document.getElementById('calcResult');
+      if (calcResult) calcResult.textContent = formatRupiah(finalTotal);
+    }
+
+    function addToCart(carId) {
+      if (!currentUser) {
+        alert('Please sign in or register first to rent a vehicle!');
+        document.getElementById('authModal').classList.remove('hidden');
+        return;
+      }
+
+      if (cart.some(i => i.carId === carId)) {
+        alert('This vehicle is already in your cart.');
+        return;
+      }
+
+      cart.push({ carId, days: 1, needDriver: false, needInsurance: true, startDate: new Date().toISOString().split('T')[0] });
+      saveData();
+      renderCartUI();
+      document.getElementById('cartDrawer').classList.remove('translate-x-full');
+    }
+
+    function renderCartUI() {
+      const container = document.getElementById('cartItemsContainer');
+      const badge = document.getElementById('cartBadge');
+      const grandTotalEl = document.getElementById('cartGrandTotal');
+
+      if (!container) return;
+      if (cart.length > 0) {
+        badge.textContent = cart.length;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+
+      container.innerHTML = '';
+      let total = 0;
+
+      if (cart.length === 0) {
+        container.innerHTML = `<div class="text-center py-8 text-gray-500 text-xs">Your rental cart is empty.</div>`;
+        grandTotalEl.textContent = "Rp 0";
+        return;
+      }
+
+      cart.forEach((item, idx) => {
+        const car = dbCars.find(c => c.id === item.carId);
+        if (!car) return;
+
+        let extra = (item.needDriver ? 500000 : 0) + (item.needInsurance ? 250000 : 0);
+        let subtotal = (car.pricePerDay + extra) * item.days;
+        total += subtotal;
+
+        const el = document.createElement('div');
+        el.className = 'glass-card p-4 rounded-xl border border-gray-800 space-y-2 text-xs animate-fade-up';
+        el.innerHTML = `
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-white">${car.name}</span>
+            <button onclick="removeFromCart(${idx})" type="button" class="text-red-400 hover:text-red-300 p-1">✕</button>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="text-[10px] text-gray-400 block">Duration (Days)</label>
+              <input type="number" value="${item.days}" min="1" onchange="cart[${idx}].days = parseInt(this.value); saveData(); renderCartUI();" class="w-full bg-gray-900 border border-gray-800 rounded p-1 text-white focus:border-amber-500 outline-none" />
+            </div>
+            <div>
+              <label class="text-[10px] text-gray-400 block">Start Date</label>
+              <input type="date" value="${item.startDate}" onchange="cart[${idx}].startDate = this.value; saveData();" class="w-full bg-gray-900 border border-gray-800 rounded p-1 text-white [color-scheme:dark] focus:border-amber-500 outline-none" />
+            </div>
+          </div>
+          <div class="flex justify-between text-amber-400 font-bold pt-1">
+            <span>Subtotal:</span>
+            <span>${formatRupiah(subtotal)}</span>
+          </div>
+        `;
+        container.appendChild(el);
+      });
+
+      grandTotalEl.textContent = formatRupiah(total);
+    }
+
+    function removeFromCart(idx) {
+      cart.splice(idx, 1);
+      saveData();
+      renderCartUI();
+    }
+
+    function renderAdminTables() {
+      const carsTbody = document.getElementById('adminCarsTableBody');
+      const ordersTbody = document.getElementById('adminOrdersTableBody');
+
+      if (carsTbody) {
+        carsTbody.innerHTML = '';
+        dbCars.forEach(car => {
+          const tr = document.createElement('tr');
+          tr.className = "hover:bg-gray-900/50 transition-colors";
+          tr.innerHTML = `
+            <td class="p-3"><img src="${car.image}" class="w-12 h-8 object-cover rounded shadow" /></td>
+            <td class="p-3 font-bold text-white">${car.name} <span class="text-gray-500 font-normal">(${car.brand})</span></td>
+            <td class="p-3 uppercase">${car.category} - <span class="text-amber-400">${car.location}</span></td>
+            <td class="p-3 text-amber-400 font-bold">${formatRupiah(car.pricePerDay)}</td>
+            <td class="p-3">
+              <select onchange="updateCarStatusFromAdmin(${car.id}, this.value)" class="bg-gray-900 border border-gray-800 text-white rounded p-1">
+                <option value="tersedia" ${car.status === 'tersedia' ? 'selected' : ''}>Available</option>
+                <option value="disewa" ${car.status === 'disewa' ? 'selected' : ''}>Rented</option>
+                <option value="tidak_tersedia" ${car.status === 'tidak_tersedia' ? 'selected' : ''}>Unavailable</option>
+              </select>
+            </td>
+            <td class="p-3">
+              <button onclick="openEditCarModal(${car.id})" type="button" class="text-blue-400 hover:underline mr-2">Edit</button>
+              <button onclick="deleteCarFromAdmin(${car.id})" type="button" class="text-red-400 hover:underline">Delete</button>
+            </td>
+          `;
+          carsTbody.appendChild(tr);
+        });
+      }
+
+      if (ordersTbody) {
+        ordersTbody.innerHTML = '';
+        if (dbOrders.length === 0) {
+          ordersTbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-gray-500">No customer orders yet.</td></tr>`;
+        } else {
+          dbOrders.forEach(ord => {
+            const tr = document.createElement('tr');
+            tr.className = "hover:bg-gray-900/50 transition-colors";
+            tr.innerHTML = `
+              <td class="p-3">
+                <span class="font-bold text-white block">${ord.id}</span>
+                <span class="text-gray-400">${ord.userName}</span>
+              </td>
+              <td class="p-3">
+                ${ord.cartItems.map(item => {
+                  const c = dbCars.find(x => x.id === item.carId);
+                  return `<div>• ${c ? c.name : 'Car'} (${item.days} Days)</div>`;
+                }).join('')}
+              </td>
+              <td class="p-3 font-bold text-amber-400">${formatRupiah(ord.totalAmount)}</td>
+              <td class="p-3 uppercase font-bold text-xs">${ord.status}</td>
+              <td class="p-3">
+                <select onchange="updateOrderStatusFromAdmin('${ord.id}', this.value)" class="bg-gray-900 border border-gray-800 text-white rounded p-1 text-xs">
+                  <option value="pending" ${ord.status === 'pending' ? 'selected' : ''}>Pending</option>
+                  <option value="approved" ${ord.status === 'approved' ? 'selected' : ''}>Approved</option>
+                  <option value="rejected" ${ord.status === 'rejected' ? 'selected' : ''}>Rejected</option>
+                  <option value="completed" ${ord.status === 'completed' ? 'selected' : ''}>Completed</option>
+                </select>
+              </td>
+            `;
+            ordersTbody.appendChild(tr);
+          });
+        }
+      }
+    }
+
+    function updateCarStatusFromAdmin(id, newStatus) {
+      const car = dbCars.find(c => c.id === id);
+      if (car) {
+        car.status = newStatus;
+        saveData();
+      }
+    }
+
+    function deleteCarFromAdmin(id) {
+      if (confirm('Are you sure you want to delete this vehicle?')) {
+        dbCars = dbCars.filter(c => c.id !== id);
+        saveData();
+        renderAdminTables();
+      }
+    }
+
+    function updateOrderStatusFromAdmin(orderId, newStatus) {
+      const order = dbOrders.find(o => o.id === orderId);
+      if (order) {
+        order.status = newStatus;
+        saveData();
+        renderAdminTables();
+      }
+    }
+
+    function openEditCarModal(id) {
+      const car = dbCars.find(c => c.id === id);
+      if (!car) return;
+
+      document.getElementById('carFormTitle').textContent = "Edit Vehicle Data & Stock";
+      document.getElementById('editCarId').value = car.id;
+      document.getElementById('editCarName').value = car.name;
+      document.getElementById('editCarBrand').value = car.brand;
+      document.getElementById('editCarCategory').value = car.category;
+      document.getElementById('editCarPrice').value = car.pricePerDay;
+      document.getElementById('editCarLocation').value = car.location || 'Jakarta';
+      document.getElementById('editCarStatus').value = car.status;
+      document.getElementById('editCarBadge').value = car.badge;
+      document.getElementById('editCarImage').value = car.image;
+      document.getElementById('editCarSeats').value = car.seats;
+      document.getElementById('editCarTrans').value = car.transmission;
+      document.getElementById('editCarYear').value = car.year;
+
+      document.getElementById('carFormModal').classList.remove('hidden');
+    }
+
+    function renderUserOrders() {
+      const userOrdersList = document.getElementById('userOrdersList');
+      if (!userOrdersList || !currentUser) return;
+
+      userOrdersList.innerHTML = '';
+      const myOrders = dbOrders.filter(o => o.userId === currentUser.id);
+
+      if (myOrders.length === 0) {
+        userOrdersList.innerHTML = `<div class="text-center py-8 text-gray-500 text-xs">No order history found.</div>`;
+        return;
+      }
+
+      myOrders.forEach(ord => {
+        const orderEl = document.createElement('div');
+        orderEl.className = 'glass-card p-4 rounded-xl border border-gray-800 space-y-2 text-xs animate-fade-up';
+        orderEl.innerHTML = `
+          <div class="flex justify-between items-center border-b border-gray-800 pb-2">
+            <span class="font-bold text-white">${ord.id}</span>
+            <span class="text-[10px] text-gray-400">${ord.createdAt}</span>
+          </div>
+          <div class="space-y-1">
+            ${ord.cartItems.map(item => {
+              const car = dbCars.find(c => c.id === item.carId);
+              return `<div class="text-gray-300">• ${car ? car.name : 'Car'} (${item.days} Days)</div>`;
+            }).join('')}
+          </div>
+          <div class="flex justify-between text-amber-400 font-bold pt-1 border-t border-gray-800">
+            <span>Total: ${formatRupiah(ord.totalAmount)}</span>
+            <span class="uppercase px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/30">${ord.status}</span>
+          </div>
+        `;
+        userOrdersList.appendChild(orderEl);
+      });
+    }
+
+    // Event Bindings
+    function bindAuthEvents() {
+      const openLoginBtn = document.getElementById('openLoginBtn');
+      if (openLoginBtn) {
+        openLoginBtn.onclick = () => document.getElementById('authModal').classList.remove('hidden');
+      }
+
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        logoutBtn.onclick = () => {
+          currentUser = null;
+          saveData();
+          applyRoleBasedView();
+        };
+      }
+
+      const openUserOrders = document.getElementById('openUserOrders');
+      if (openUserOrders) {
+        openUserOrders.onclick = () => {
+          renderUserOrders();
+          document.getElementById('userOrdersModal').classList.remove('hidden');
+        };
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+      }
+      applyRoleBasedView();
+      renderCartUI();
+
+      // Tomorrow default date
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const filterDateEl = document.getElementById('filterDate');
+      if (filterDateEl) filterDateEl.value = tomorrow.toISOString().split('T')[0];
+
+      // Filters
+      document.getElementById('applyFiltersBtn')?.addEventListener('click', renderFleet);
+      document.getElementById('filterLocation')?.addEventListener('change', renderFleet);
+      document.getElementById('filterCategory')?.addEventListener('change', renderFleet);
+
+      // Calculator Listeners
+      document.getElementById('calcCarSelect')?.addEventListener('change', calculateEstimate);
+      document.getElementById('calcDays')?.addEventListener('input', calculateEstimate);
+      document.getElementById('calcDriver')?.addEventListener('change', calculateEstimate);
+      document.getElementById('calcInsurance')?.addEventListener('change', calculateEstimate);
+
+      // Cart Drawer Toggles
+      document.getElementById('cartToggleBtn')?.addEventListener('click', () => {
+        document.getElementById('cartDrawer').classList.remove('translate-x-full');
+      });
+      document.getElementById('closeCartBtn')?.addEventListener('click', () => {
+        document.getElementById('cartDrawer').classList.add('translate-x-full');
+      });
+
+      // Checkout -> halaman Mode Kasir. Fitur lain tetap dipertahankan.
+      document.getElementById('checkoutBtn')?.addEventListener('click', () => {
+        if (cart.length === 0) {
+          alert('Your cart is empty.');
+          return;
+        }
+        if (!currentUser) {
+          alert('Please sign in or register first to continue checkout.');
+          document.getElementById('authModal').classList.remove('hidden');
+          return;
+        }
+
+        const checkoutItems = cart.map(item => {
+          const car = dbCars.find(c => c.id === item.carId);
+          if (!car) return null;
+          const days = Math.max(1, parseInt(item.days, 10) || 1);
+          const extra = (item.needDriver ? 500000 : 0) + (item.needInsurance ? 250000 : 0);
+          const subtotal = (Number(car.pricePerDay) + extra) * days;
+          return {
+            carId: car.id,
+            name: car.name,
+            brand: car.brand || '',
+            category: car.category || '',
+            image: car.image || '',
+            pricePerDay: Number(car.pricePerDay) || 0,
+            days,
+            startDate: item.startDate || new Date().toISOString().slice(0, 10),
+            needDriver: !!item.needDriver,
+            needInsurance: !!item.needInsurance,
+            subtotal
+          };
+        }).filter(Boolean);
+
+        if (!checkoutItems.length) {
+          alert('No valid vehicles found in your cart. Please review your cart.');
+          return;
+        }
+
+        const totalAmount = checkoutItems.reduce((sum, item) => sum + item.subtotal, 0);
+        const orderId = 'ORD-' + Math.floor(100000 + Math.random() * 900000);
+        const checkoutData = {
+          orderId,
+          customer: { id: currentUser.id, name: currentUser.name, email: currentUser.email || '', phone: currentUser.phone || '' },
+          items: checkoutItems,
+          rentalTotal: totalAmount,
+          createdAt: new Date().toISOString(),
+          source: 'luxedrive-main-page'
+        };
+
+        // Simpan data checkout agar Mode Kasir dapat membacanya di halaman berikutnya.
+        localStorage.setItem('luxedrive_checkout', JSON.stringify(checkoutData));
+        document.getElementById('cartDrawer').classList.add('translate-x-full');
+        window.location.href = 'kasirmode.html';
+      });
+
+      // Auth Modal Switcher
+      document.getElementById('closeAuthBtn')?.addEventListener('click', () => document.getElementById('authModal').classList.add('hidden'));
+      document.getElementById('switchToRegister')?.addEventListener('click', () => {
+        document.getElementById('loginSection').classList.add('hidden');
+        document.getElementById('registerSection').classList.remove('hidden');
+      });
+      document.getElementById('switchToLogin')?.addEventListener('click', () => {
+        document.getElementById('registerSection').classList.add('hidden');
+        document.getElementById('loginSection').classList.remove('hidden');
+      });
+
+      // Login Handler
+      document.getElementById('loginForm')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const pass = document.getElementById('loginPassword').value;
+
+        const found = dbUsers.find(u => u.email === email && u.password === pass);
+        if (found) {
+          currentUser = found;
+          saveData();
+          document.getElementById('authModal').classList.add('hidden');
+          applyRoleBasedView();
+        } else {
+          alert('Invalid email or password!');
+        }
+      });
+
+      // Register Handler
+      document.getElementById('registerForm')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('regName').value;
+        const email = document.getElementById('regEmail').value;
+        const phone = document.getElementById('regPhone').value;
+        const password = document.getElementById('regPassword').value;
+
+        if (dbUsers.some(u => u.email === email)) {
+          alert('Email is already registered!');
+          return;
+        }
+
+        const newUser = { id: Date.now(), name, email, phone, password, role: 'user' };
+        dbUsers.push(newUser);
+        currentUser = newUser;
+        saveData();
+        document.getElementById('authModal').classList.add('hidden');
+        applyRoleBasedView();
+      });
+
+      // User Orders Modal Close
+      document.getElementById('closeUserOrdersBtn')?.addEventListener('click', () => {
+        document.getElementById('userOrdersModal').classList.add('hidden');
+      });
+
+      // Admin Tab Switchers
+      document.getElementById('tabManageCars')?.addEventListener('click', (e) => {
+        e.target.className = "pb-3 text-amber-400 border-b-2 border-amber-400 transition-all";
+        document.getElementById('tabManageOrders').className = "pb-3 text-gray-400 hover:text-white transition-all";
+        document.getElementById('adminCarsSection').classList.remove('hidden');
+        document.getElementById('adminOrdersSection').classList.add('hidden');
+      });
+
+      document.getElementById('tabManageOrders')?.addEventListener('click', (e) => {
+        e.target.className = "pb-3 text-amber-400 border-b-2 border-amber-400 transition-all";
+        document.getElementById('tabManageCars').className = "pb-3 text-gray-400 hover:text-white transition-all";
+        document.getElementById('adminOrdersSection').classList.remove('hidden');
+        document.getElementById('adminCarsSection').classList.add('hidden');
+        renderAdminTables();
+      });
+
+      // Add New Car Button (Admin)
+      document.getElementById('addNewCarBtn')?.addEventListener('click', () => {
+        document.getElementById('carFormTitle').textContent = "Add New Vehicle";
+        document.getElementById('editCarId').value = "";
+        document.getElementById('carEditorForm').reset();
+        document.getElementById('carFormModal').classList.remove('hidden');
+      });
+
+      document.getElementById('closeCarFormBtn')?.addEventListener('click', () => {
+        document.getElementById('carFormModal').classList.add('hidden');
+      });
+
+      // Save/Edit Car Form Handler
+      document.getElementById('carEditorForm')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const id = document.getElementById('editCarId').value;
+        const name = document.getElementById('editCarName').value;
+        const brand = document.getElementById('editCarBrand').value;
+        const category = document.getElementById('editCarCategory').value;
+        const pricePerDay = parseInt(document.getElementById('editCarPrice').value);
+        const location = document.getElementById('editCarLocation').value;
+        const status = document.getElementById('editCarStatus').value;
+        const badge = document.getElementById('editCarBadge').value;
+        const image = document.getElementById('editCarImage').value;
+        const seats = parseInt(document.getElementById('editCarSeats').value);
+        const transmission = document.getElementById('editCarTrans').value;
+        const year = parseInt(document.getElementById('editCarYear').value);
+
+        if (id) {
+          const car = dbCars.find(c => c.id == id);
+          if (car) {
+            car.name = name;
+            car.brand = brand;
+            car.category = category;
+            car.pricePerDay = pricePerDay;
+            car.location = location;
+            car.status = status;
+            car.badge = badge;
+            car.image = image;
+            car.seats = seats;
+            car.transmission = transmission;
+            car.year = year;
+          }
+        } else {
+          dbCars.push({
+            id: Date.now(),
+            name, brand, category, pricePerDay, location, status, badge, image, seats, transmission, year
+          });
+        }
+
+        saveData();
+        document.getElementById('carFormModal').classList.add('hidden');
+        renderAdminTables();
+        renderFleet();
+      });
+
+      // Mobile Menu Toggle
+      document.getElementById('mobileMenuBtn')?.addEventListener('click', () => {
+        document.getElementById('mobileMenu').classList.toggle('hidden');
+      });
+    });
+  </script>
+</body>
+</html>
